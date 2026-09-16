@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wayang Kulit — Hand Puppetry</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="stage" aria-label="Wayang kulit stage"></canvas>
+    <video id="video" playsinline muted></video>
+
+    <section id="intro" class="panel intro">
+      <div class="intro-content">
+        <p class="eyebrow"><span class="badge-dot"></span>Wayang Kulit Digital</p>
+        <h1>Two puppets,<br />one in each hand</h1>
+        <p class="lede">Play two leather shadow puppets on the lamp-lit kelir. Your webcam tracks both hands, just as a dalang holds the sticks.</p>
+        
+        <ul class="howto">
+          <li><span class="k">Left &amp; right hand</span><span>Each hand holds one character: left hand plays left puppet, right hand plays right puppet.</span></li>
+          <li><span class="k">Palm</span><span>The body stick (gapit). The puppet follows it.</span></li>
+          <li><span class="k">Thumb &amp; index</span><span>Puppet's arm rods (tuding). Spread, raise or pinch them.</span></li>
+          <li><span class="k">Tilt hand</span><span>The puppet leans dynamically with your hand tilt.</span></li>
+          <li><span class="k">Closer to camera</span><span>Lifts puppet off screen so its shadow grows &amp; softens.</span></li>
+          <li><span class="k">Little finger</span><span>Show pinky: puppet performs its signature dance (kiprahan) on beat.</span></li>
+        </ul>
+        
+        <div class="actions">
+          <button id="start-camera" class="btn primary">
+            <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            Start camera
+          </button>
+          <button id="use-mouse" class="btn">
+            <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13 1.07V3.08A8.001 8.001 0 0 1 20.93 11H22.9A10.001 10.001 0 0 0 13 1.07M11 1.07A10.001 10.001 0 0 0 1.07 11H3.08A8.001 8.001 0 0 1 11 3.08V1.07M4.27 15.27A9.954 9.954 0 0 0 11 22.93v-2.01a7.97 7.97 0 0 1-5.32-5.32L4.27 15.27m15.46 0-1.41 1.41A7.97 7.97 0 0 1 13 20.92v2.01c2.76-.46 5.25-2.02 6.73-4.25l-.001-.01Z"/></svg>
+            Use mouse
+          </button>
+        </div>
+        <p id="intro-status" class="status-line" role="status"></p>
+      </div>
+    </section>
+
+    <div id="hud" class="hud">
+      <div class="pill" id="status"><span class="dot"></span><span id="status-text">Demo</span></div>
+      <div class="keys-container">
+        <p class="keys">
+          <span class="key-group"><kbd>D</kbd> dance</span>
+          <span class="key-group"><kbd>F</kbd><kbd>G</kbd> turn puppets</span>
+          <span class="key-group"><kbd>H</kbd> hide UI</span>
+          <span class="key-group"><kbd>C</kbd> recalibrate</span>
+          <span class="key-group"><kbd>V</kbd> camera</span>
+          <span class="key-group"><kbd>P</kbd> pop out</span>
+          <span class="key-group"><kbd>M</kbd> music</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="top-controls">
+      <button id="sound-toggle" class="icon-btn sound-btn" aria-label="Mute music" aria-pressed="false" title="Toggle Music (M)">
+        <svg class="on" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Zm-2.5-8.8v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6Z"/></svg>
+        <svg class="off" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M4 9v6h4l5 4V5L8 9H4Zm12.6 3 2.7-2.7-1.4-1.4-2.7 2.7-2.7-2.7-1.4 1.4 2.7 2.7-2.7 2.7 1.4 1.4 2.7-2.7 2.7 2.7 1.4-1.4-2.7-2.7Z" transform="translate(2 0)"/></svg>
+      </button>
+      <button id="settings-toggle" class="icon-btn" aria-label="Settings" aria-expanded="false" title="Settings">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.3 7.3 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.3 7.3 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.3 7.3 0 0 0 1.7 1L11 21h4l.4-2.7a7.3 7.3 0 0 0 1.7-1l2.5 1 2-3.5ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg>
+      </button>
+    </div>
+
+    <aside id="settings" class="panel settings" hidden>
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button id="settings-close" class="close-btn" aria-label="Close settings">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <label>Characters
+        <select id="opt-characters">
+          <option value="two">Two puppets, one per hand</option>
+          <option value="one">One puppet</option>
+        </select>
+      </label>
+      <label>Arm-rod fingers
+        <select id="opt-fingers">
+          <option value="thumb-index">Thumb + index</option>
+          <option value="thumb-pinky">Thumb + pinky (arms spread wider)</option>
+          <option value="index-pinky">Index + pinky</option>
+        </select>
+      </label>
+      <label id="bodyhand-row" hidden>Body hand (one puppet, two hands)
+        <select id="opt-bodyhand">
+          <option value="right">Right hand holds the gapit</option>
+          <option value="left">Left hand holds the gapit</option>
+        </select>
+      </label>
+      <label>Facing
+        <select id="opt-facing">
+          <option value="target">Face each other</option>
+          <option value="walk">Face the way they walk</option>
+          <option value="manual">Manual (F / G to turn)</option>
+        </select>
+      </label>
+      <label class="row toggle-row">
+        <span>Show camera preview</span>
+        <input type="checkbox" id="opt-camera" checked />
+      </label>
+      <button id="opt-popout" class="btn small" type="button">Open camera in new window</button>
+      <label>Puppet size
+        <input type="range" id="opt-size" min="0.36" max="0.72" step="0.01" value="0.53" />
+      </label>
+      <label>Music volume
+        <input type="range" id="opt-volume" min="0" max="1" step="0.01" value="0.6" />
+      </label>
+    </aside>
+
+    <div id="preview-box" hidden>
+      <div class="preview-header">
+        <span class="preview-dot"></span>
+        <span class="preview-title">Hand Tracker</span>
+      </div>
+      <canvas id="preview" width="320" height="180"></canvas>
+      <button id="preview-popout" class="popout-btn" type="button" aria-label="Open camera in a new window" title="Open in a new window (P)">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14V3ZM5 5h6v2H5v12h12v-6h2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg>
+      </button>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="error" class="panel error" hidden></div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
