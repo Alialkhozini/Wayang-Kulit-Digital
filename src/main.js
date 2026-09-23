@@ -1,4 +1,4 @@
-﻿// Main entry point: initializes the renderer, puppets, tracking, audio,
+// Main entry point: initializes the renderer, puppets, tracking, audio,
 // and runs the animation loop. Wires up all UI event handlers.
 
 import { Renderer, STAGE_W, STAGE_H } from './renderer.js';
@@ -73,9 +73,34 @@ resize();
 const intro = $('intro');
 const introStatus = $('intro-status');
 const startBtn = $('start-camera');
+const mouseBtn = $('use-mouse');
+const modeCameraBtn = $('mode-camera-btn');
+const modeMouseBtn = $('mode-mouse-btn');
+const howtoCamera = $('howto-camera');
+const howtoMouse = $('howto-mouse');
 const statusPill = $('status');
 const statusText = $('status-text');
 let showPreview = true;
+
+function switchMode(mode) {
+  const isCam = mode === 'camera';
+  modeCameraBtn?.classList.toggle('active', isCam);
+  modeCameraBtn?.setAttribute('aria-selected', String(isCam));
+  modeMouseBtn?.classList.toggle('active', !isCam);
+  modeMouseBtn?.setAttribute('aria-selected', String(!isCam));
+
+  if (howtoCamera) howtoCamera.hidden = !isCam;
+  if (howtoMouse) howtoMouse.hidden = isCam;
+
+  if (startBtn) startBtn.hidden = !isCam;
+  if (mouseBtn) mouseBtn.hidden = isCam;
+
+  introStatus.textContent = '';
+  introStatus.classList.remove('err');
+}
+
+modeCameraBtn?.addEventListener('click', () => switchMode('camera'));
+modeMouseBtn?.addEventListener('click', () => switchMode('mouse'));
 
 startBtn.addEventListener('click', async () => {
   startBtn.disabled = true;
@@ -94,13 +119,13 @@ startBtn.addEventListener('click', async () => {
     introStatus.classList.add('err');
     introStatus.textContent =
       err?.name === 'NotAllowedError'
-        ? 'Camera permission was blocked. Allow it in the address bar, or play with the mouse.'
-        : `Camera unavailable (${err?.message || err}). You can still play with the mouse.`;
+        ? 'Camera permission was blocked. Allow it in the address bar, or switch to Mouse Mode.'
+        : `Camera unavailable (${err?.message || err}). You can switch to Mouse Mode.`;
     startBtn.disabled = false;
   }
 });
 
-$('use-mouse').addEventListener('click', () => {
+mouseBtn.addEventListener('click', () => {
   controller.source = 'mouse';
   intro.classList.add('gone');
 });

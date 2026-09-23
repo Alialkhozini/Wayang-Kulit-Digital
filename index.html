@@ -68,7 +68,18 @@
         <h1>Two puppets,<br />one in each hand</h1>
         <p class="lede">Play two leather shadow puppets on the lamp-lit kelir. Your webcam tracks both hands, just as a dalang holds the sticks.</p>
         
-        <ul class="howto">
+        <div class="mode-switch" role="tablist" aria-label="Control mode selection">
+          <button id="mode-camera-btn" class="mode-tab active" role="tab" aria-selected="true" aria-controls="howto-camera" type="button">
+            <svg class="mode-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            <span>Webcam Mode</span>
+          </button>
+          <button id="mode-mouse-btn" class="mode-tab" role="tab" aria-selected="false" aria-controls="howto-mouse" type="button">
+            <svg class="mode-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13 1.07V3.08A8.001 8.001 0 0 1 20.93 11H22.9A10.001 10.001 0 0 0 13 1.07M11 1.07A10.001 10.001 0 0 0 1.07 11H3.08A8.001 8.001 0 0 1 11 3.08V1.07M4.27 15.27A9.954 9.954 0 0 0 11 22.93v-2.01a7.97 7.97 0 0 1-5.32-5.32L4.27 15.27m15.46 0-1.41 1.41A7.97 7.97 0 0 1 13 20.92v2.01c2.76-.46 5.25-2.02 6.73-4.25l-.001-.01Z"/></svg>
+            <span>Mouse Mode</span>
+          </button>
+        </div>
+
+        <ul id="howto-camera" class="howto" role="tabpanel" aria-labelledby="mode-camera-btn">
           <li><span class="k">Left &amp; right hand</span><span>Each hand holds one character: left hand plays left puppet, right hand plays right puppet.</span></li>
           <li><span class="k">Palm</span><span>The body stick (gapit). The puppet follows it.</span></li>
           <li><span class="k">Thumb &amp; index</span><span>Puppet's arm rods (tuding). Spread, raise or pinch them.</span></li>
@@ -76,15 +87,24 @@
           <li><span class="k">Closer to camera</span><span>Lifts puppet off screen so its shadow grows &amp; softens.</span></li>
           <li><span class="k">Little finger</span><span>Show pinky: puppet performs its signature dance (kiprahan) on beat.</span></li>
         </ul>
-        
+
+        <ul id="howto-mouse" class="howto" role="tabpanel" aria-labelledby="mode-mouse-btn" hidden>
+          <li><span class="k">Move cursor</span><span>The body stick (gapit). Move cursor to guide the puppet across the kelir.</span></li>
+          <li><span class="k">Scroll wheel</span><span>Lifts puppet off screen so its shadow grows &amp; softens.</span></li>
+          <li><span class="k"><kbd>D</kbd> key</span><span>Performs the puppet's signature dance (kiprahan) on beat.</span></li>
+          <li><span class="k"><kbd>F</kbd> / <kbd>G</kbd> keys</span><span>Press <kbd>F</kbd> (left) or <kbd>G</kbd> (right) to flip facing direction.</span></li>
+          <li><span class="k"><kbd>M</kbd> key</span><span>Toggle traditional gamelan background music.</span></li>
+          <li><span class="k"><kbd>H</kbd> key</span><span>Toggle HUD interface for an immersive shadow play view.</span></li>
+        </ul>
+
         <div class="actions">
           <button id="start-camera" class="btn primary">
             <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
             Start camera
           </button>
-          <button id="use-mouse" class="btn">
+          <button id="use-mouse" class="btn primary" hidden>
             <svg class="btn-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M13 1.07V3.08A8.001 8.001 0 0 1 20.93 11H22.9A10.001 10.001 0 0 0 13 1.07M11 1.07A10.001 10.001 0 0 0 1.07 11H3.08A8.001 8.001 0 0 1 11 3.08V1.07M4.27 15.27A9.954 9.954 0 0 0 11 22.93v-2.01a7.97 7.97 0 0 1-5.32-5.32L4.27 15.27m15.46 0-1.41 1.41A7.97 7.97 0 0 1 13 20.92v2.01c2.76-.46 5.25-2.02 6.73-4.25l-.001-.01Z"/></svg>
-            Use mouse
+            Play with mouse
           </button>
         </div>
         <p id="intro-status" class="status-line" role="status"></p>
