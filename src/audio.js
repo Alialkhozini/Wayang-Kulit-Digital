@@ -1,4 +1,4 @@
-// Beat-synced clock and looping background music for the gamelan backsound.
+﻿// Beat-synced clock and looping background music for the gamelan backsound.
 
 // BeatClock follows a precomputed beat grid from the recording, handling tempo
 // (irama) changes. Falls back to a steady pulse when music isn't playing.
@@ -50,7 +50,7 @@ export class BeatClock {
     if (this.synced) {
       const ct = this.el.currentTime;
       this.mt += dt;
-      // currentTime updates coarsely — follow gently, snap on seeks/loops
+      // currentTime updates coarsely â€” follow gently, snap on seeks/loops
       if (Math.abs(ct - this.mt) > 0.15) this.mt = ct;
       else this.mt += (ct - this.mt) * 0.1;
       const pos = this.posAt(this.mt);
@@ -114,25 +114,24 @@ export class BackgroundMusic {
   }
 
   async start() {
-    if (this.started) return;
-    this.started = true;
-    if (this.muted) return;
+    if (this.started || this.muted) return;
     try {
       await this.el.play();
-      this.fadeTo(this.target, 3);
+      this.started = true;
+      this.fadeTo(this.target, 1.5);
     } catch (err) {
       this.started = false;
-      console.warn('Backsound could not start yet:', err?.message || err);
+      console.warn('Autoplay waiting for user gesture:', err?.message || err);
     }
   }
 
   setMuted(muted) {
     this.muted = muted;
     this._save();
-    if (!this.started) return;
     if (muted) {
       this.fadeTo(0, 0.4);
     } else {
+      this.started = true;
       this.el.play().catch(() => {});
       this.fadeTo(this.target, 0.8);
     }

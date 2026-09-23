@@ -1,4 +1,4 @@
-// Main entry point: initializes the renderer, puppets, tracking, audio,
+﻿// Main entry point: initializes the renderer, puppets, tracking, audio,
 // and runs the animation loop. Wires up all UI event handlers.
 
 import { Renderer, STAGE_W, STAGE_H } from './renderer.js';
@@ -188,17 +188,29 @@ function syncSoundUi() {
   soundBtn.setAttribute('aria-label', music.muted ? 'Unmute music' : 'Mute music');
 }
 syncSoundUi();
-const startMusic = (e) => {
+if (!music.muted) {
+  music.start();
+}
+
+const tryAutoplayOnInteraction = (e) => {
+  if (music.started || music.muted) {
+    removeEventListener('pointerdown', tryAutoplayOnInteraction, true);
+    removeEventListener('keydown', tryAutoplayOnInteraction, true);
+    removeEventListener('touchstart', tryAutoplayOnInteraction, true);
+    return;
+  }
   if (e.target?.closest?.('#sound-toggle') || e.key?.toLowerCase() === 'm') return;
   music.start().then(() => {
     if (music.started) {
-      removeEventListener('pointerdown', startMusic, true);
-      removeEventListener('keydown', startMusic, true);
+      removeEventListener('pointerdown', tryAutoplayOnInteraction, true);
+      removeEventListener('keydown', tryAutoplayOnInteraction, true);
+      removeEventListener('touchstart', tryAutoplayOnInteraction, true);
     }
   });
 };
-addEventListener('pointerdown', startMusic, true);
-addEventListener('keydown', startMusic, true);
+addEventListener('pointerdown', tryAutoplayOnInteraction, true);
+addEventListener('keydown', tryAutoplayOnInteraction, true);
+addEventListener('touchstart', tryAutoplayOnInteraction, true);
 function toggleMusic() {
   music.setMuted(!music.muted);
   if (!music.muted) music.start();
@@ -250,19 +262,19 @@ function updateHud() {
   let text, cls = '';
   if (source === 'camera') {
     if (status.hands === 0) {
-      text = controller.puppetCount === 2 ? 'Camera on · raise both hands' : 'Camera on · show your hand';
+      text = controller.puppetCount === 2 ? 'Camera on Â· raise both hands' : 'Camera on Â· show your hand';
       cls = 'warn';
     } else {
       text = {
-        'two puppets': status.hands === 2 ? 'Two puppets · one per hand' : 'Two puppets · 1 hand seen',
-        'two hands': 'One puppet · gapit + tuding',
-        'one hand': 'One puppet · palm + fingers',
+        'two puppets': status.hands === 2 ? 'Two puppets Â· one per hand' : 'Two puppets Â· 1 hand seen',
+        'two hands': 'One puppet Â· gapit + tuding',
+        'one hand': 'One puppet Â· palm + fingers',
       }[status.mode] ?? status.mode;
-      if (status.calibrating) text += ' · calibrating depth';
+      if (status.calibrating) text += ' Â· calibrating depth';
       cls = 'live';
     }
   } else if (source === 'mouse') {
-    text = 'Mouse · scroll for depth';
+    text = 'Mouse Â· scroll for depth';
   } else {
     text = 'Demo';
   }
@@ -362,7 +374,7 @@ function tick(nowMs) {
   active.forEach((p, j) => {
     if (p.danceStarted) {
       p.danceStarted = false;
-      showToast(active.length === 2 ? `${j === 0 ? 'Left' : 'Right'} puppet · Kiprahan` : 'Kiprahan');
+      showToast(active.length === 2 ? `${j === 0 ? 'Left' : 'Right'} puppet Â· Kiprahan` : 'Kiprahan');
     }
   });
 
