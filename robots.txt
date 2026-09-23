@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://wayangdigital.alialkhozini.my.id/sitemap.xml
